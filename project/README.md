@@ -61,8 +61,10 @@ Open a terminal at the root of the repo, and copy the `env.example` file to `.en
 ```bash
 cp env.example .env
 ```
-then open .env and fill your API credential in GEMINI_API_KEY, as well as make up a USER_API_KEY (anything works). You can use
-for example `my-api-key`.
+then open .env and fill your API credential in GEMINI_API_KEY, and set USER_API_KEY to a password you
+make up, for example `my-api-key` (it must not be empty). In the Udacity workspace, keep the
+`GOOGLE_GEMINI_BASE_URL`, `PHOENIX_HOST_ROOT_PATH` and `API_ROOT_PATH` lines; on your own machine,
+delete all three.
 
 **NOTE**: this is obviously not secure, but it is here to remind you that a real production app will need to have some authentication
 measure!
@@ -114,7 +116,22 @@ It is now time to verify your work. Run all tests at once with:
 ```bash
 uv run pytest tests/ -vv
 ```
-All tests should pass. If they don't, fix them before submitting your project.
+All tests should pass, with one exception. `tests/test_env_setup.py` checks your own setup rather than
+your code: it requires a `.env` file and makes a real call to the Gemini API, so it only passes once your
+credentials are in place. To run just the project's own tests:
+
+```bash
+uv run pytest tests/ -vv --ignore=tests/test_env_setup.py
+```
+
+If any of the other tests fail, fix them before submitting your project — and keep the output of the
+`--ignore` command: it goes in your submission's evidence file.
+
+**Evidence file.** Alongside your code, submit one file at the top level named `RUN_EVIDENCE.pdf`
+with: (1) the output of `uv run pytest tests/ -vv --ignore=tests/test_env_setup.py`, pasted as text;
+(2) the output of one eval run, pasted as text (a score below 100% is expected); (3) a screenshot of a
+Gradio conversation where a message was flagged, showing the rationale; (4) a screenshot of your
+traces in the Phoenix dashboard. The classroom's *Submission Instructions* have the details.
 
 ## 7. Evals
 Now that our system is complete, we need to run evaluations to understand and measure how it behaves. 
